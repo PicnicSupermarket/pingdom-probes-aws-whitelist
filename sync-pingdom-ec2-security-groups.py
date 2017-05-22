@@ -92,7 +92,7 @@ class SecurityGroupUpdater(object):
     def get_ips(self):
         r = requests.request('GET', self.whitelist, timeout=10)
         r.raise_for_status()
-        return set(r.iter_lines())
+        return set(r.iter_lines(decode_unicode=True))
 
     def create_permission(self, ip):
         return Permission(self.protocol, '{0}/32'.format(ip), self.from_port, self.to_port)
