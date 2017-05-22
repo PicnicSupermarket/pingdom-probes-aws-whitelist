@@ -108,8 +108,9 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '--region',
-        default='us-east-1',
-        help='The AWS region where the security groups are located')
+        default=None,
+        help='The AWS region where the security groups are located; '
+             + 'defaults to the environment\'s default region')
     parser.add_argument(
         '--whitelist',
         default='https://my.pingdom.com/probes/ipv4',
