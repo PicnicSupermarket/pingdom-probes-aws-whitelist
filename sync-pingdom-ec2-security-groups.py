@@ -120,17 +120,22 @@ def main():
         default='tcp',
         help='The protocol used by the Pingdom probe')
     parser.add_argument(
-        '--port',
+        '--from-port',
         type=int,
         default=80,
-        help='The port on which Pingdom probes')
+        help='The port on which Pingdom probes (start of range)')
+    parser.add_argument(
+        '--to-port',
+        type=int,
+        default=443,
+        help='The port on which Pingdom probes (end of range)')
     parser.add_argument(
         'security-group',
         nargs='+',
         help='One of the security groups to be updated')
     args = parser.parse_args()
 
-    updater = SecurityGroupUpdater(args.region, args.whitelist, args.protocol, args.port, args.port, getattr(args, 'security-group'))
+    updater = SecurityGroupUpdater(args.region, args.whitelist, args.protocol, args.from_port, args.to_port, getattr(args, 'security-group'))
     updater.run()
 
 if __name__ == '__main__':
