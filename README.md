@@ -82,7 +82,7 @@ SUCCESS
 
 Running the script once more does not further modify the security groups:
 ```
-$ ./sync-pingdom-ec2-security-groups.sh sg-12345678 sg-23456789 sg-34567890
+$ ./sync-pingdom-ec2-security-groups.py sg-12345678 sg-23456789 sg-34567890
 SUCCESS
 ```
 
