@@ -25,7 +25,7 @@ script with `--help`:
 $ ./sync-pingdom-ec2-security-groups.py --help
 usage: sync-pingdom-ec2-security-groups.py [-h] [--whitelist WHITELIST]
                                            [--protocol {icmp,tcp,udp}]
-                                           [--port PORT]
+                                           [--from-port PORT]
                                            security-group [security-group ...]
 
 positional arguments:
@@ -38,7 +38,9 @@ optional arguments:
                         contain one one IP per line
   --protocol {icmp,tcp,udp}
                         The protocol used by the Pingdom probe
-  --port PORT           The port on which Pingdom probes
+  --from-port FROM_PORT
+                        The port on which Pingdom probes (start of range)
+  --to-port TO_PORT     The port on which Pingdom probes (end of range)
 ```
 
 Note that your environment must be configured to provide valid AWS credentials.
@@ -56,27 +58,27 @@ was last run:
 
 
 ```
-$ ./sync-pingdom-ec2-security-groups.sh sg-12345678 sg-23456789 sg-34567890
-Dropping from SG sg-12345678: Permission tcp:78.31.69.179/32:80-80
-Dropping from SG sg-12345678: Permission tcp:76.72.171.180/32:80-80
-Dropping from SG sg-12345678: Permission tcp:158.58.173.160/32:80-80
-Dropping from SG sg-12345678: Permission tcp:72.46.140.186/32:80-80
-Adding to SG sg-12345678: Permission tcp:54.70.202.58/32:80-80
-Adding to SG sg-12345678: Permission tcp:52.197.224.235/32:80-80
-Adding to SG sg-12345678: Permission tcp:52.63.164.147/32:80-80
-Adding to SG sg-12345678: Permission tcp:23.111.152.74/32:80-80
-Dropping from SG sg-23456789: Permission tcp:54.70.202.58/32:80-80
-Dropping from SG sg-23456789: Permission tcp:52.197.224.235/32:80-80
-Dropping from SG sg-23456789: Permission tcp:52.63.164.147/32:80-80
-Dropping from SG sg-23456789: Permission tcp:23.111.152.74/32:80-80
-Adding to SG sg-23456789: Permission tcp:52.63.142.2/32:80-80
-Adding to SG sg-23456789: Permission tcp:52.209.34.226/32:80-80
-Adding to SG sg-23456789: Permission tcp:178.255.154.2/32:80-80
-Adding to SG sg-23456789: Permission tcp:54.68.48.199/32:80-80
-Dropping from SG sg-34567890: Permission tcp:52.63.142.2/32:80-80
-Dropping from SG sg-34567890: Permission tcp:52.209.34.226/32:80-80
-Dropping from SG sg-34567890: Permission tcp:178.255.154.2/32:80-80
-Dropping from SG sg-34567890: Permission tcp:54.68.48.199/32:80-80
+$ ./sync-pingdom-ec2-security-groups.py sg-12345678 sg-23456789 sg-34567890
+Dropping from SG sg-12345678: Permission tcp:78.31.69.179/32:80-443
+Dropping from SG sg-12345678: Permission tcp:76.72.171.180/32:80-443
+Dropping from SG sg-12345678: Permission tcp:158.58.173.160/32:80-443
+Dropping from SG sg-12345678: Permission tcp:72.46.140.186/32:80-443
+Adding to SG sg-12345678: Permission tcp:54.70.202.58/32:80-443
+Adding to SG sg-12345678: Permission tcp:52.197.224.235/32:80-443
+Adding to SG sg-12345678: Permission tcp:52.63.164.147/32:80-443
+Adding to SG sg-12345678: Permission tcp:23.111.152.74/32:80-443
+Dropping from SG sg-23456789: Permission tcp:54.70.202.58/32:80-443
+Dropping from SG sg-23456789: Permission tcp:52.197.224.235/32:80-443
+Dropping from SG sg-23456789: Permission tcp:52.63.164.147/32:80-443
+Dropping from SG sg-23456789: Permission tcp:23.111.152.74/32:80-443
+Adding to SG sg-23456789: Permission tcp:52.63.142.2/32:80-443
+Adding to SG sg-23456789: Permission tcp:52.209.34.226/32:80-443
+Adding to SG sg-23456789: Permission tcp:178.255.154.2/32:80-443
+Adding to SG sg-23456789: Permission tcp:54.68.48.199/32:80-443
+Dropping from SG sg-34567890: Permission tcp:52.63.142.2/32:80-443
+Dropping from SG sg-34567890: Permission tcp:52.209.34.226/32:80-443
+Dropping from SG sg-34567890: Permission tcp:178.255.154.2/32:80-443
+Dropping from SG sg-34567890: Permission tcp:54.68.48.199/32:80-443
 SUCCESS
 ```
 
