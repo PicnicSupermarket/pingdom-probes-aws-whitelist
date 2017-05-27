@@ -23,7 +23,8 @@ script with `--help`:
 
 ```
 $ ./sync-pingdom-ec2-security-groups.py --help
-usage: sync-pingdom-ec2-security-groups.py [-h] [--whitelist WHITELIST]
+usage: sync-pingdom-ec2-security-groups.py [-h] [--region REGION]
+                                           [--whitelist WHITELIST]
                                            [--protocol {icmp,tcp,udp}]
                                            [--from-port PORT]
                                            security-group [security-group ...]
@@ -33,6 +34,8 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
+  --region REGION       The AWS region where the security groups are located;
+                        defaults to the environment's default region
   --whitelist WHITELIST
                         The URL at which the IP whitelist is located; must
                         contain one one IP per line
