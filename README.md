@@ -23,7 +23,8 @@ script with `--help`:
 
 ```
 $ ./sync-pingdom-ec2-security-groups.py --help
-usage: sync-pingdom-ec2-security-groups.py [-h] [--whitelist WHITELIST]
+usage: sync-pingdom-ec2-security-groups.py [-h] [--region REGION]
+                                           [--whitelist WHITELIST]
                                            [--protocol {icmp,tcp,udp}]
                                            [--port PORT]
                                            security-group [security-group ...]
@@ -33,6 +34,8 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
+  --region REGION       The AWS region where the security groups are located;
+                        defaults to the environment's default region
   --whitelist WHITELIST
                         The URL at which the IP whitelist is located; must
                         contain one one IP per line
@@ -56,7 +59,7 @@ was last run:
 
 
 ```
-$ ./sync-pingdom-ec2-security-groups.sh sg-12345678 sg-23456789 sg-34567890
+$ ./sync-pingdom-ec2-security-groups.py sg-12345678 sg-23456789 sg-34567890
 Dropping from SG sg-12345678: Permission tcp:78.31.69.179/32:80-80
 Dropping from SG sg-12345678: Permission tcp:76.72.171.180/32:80-80
 Dropping from SG sg-12345678: Permission tcp:158.58.173.160/32:80-80
