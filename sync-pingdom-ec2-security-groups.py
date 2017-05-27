@@ -123,12 +123,12 @@ def main():
         '--from-port',
         type=int,
         default=80,
-        help='The port on which Pingdom probes (start of range)')
+        help='The lowest port on which Pingdom probes')
     parser.add_argument(
         '--to-port',
         type=int,
         default=443,
-        help='The port on which Pingdom probes (end of range)')
+        help='The highest port on which Pingdom probes')
     parser.add_argument(
         'security-group',
         nargs='+',
