@@ -127,7 +127,7 @@ def main():
     parser.add_argument(
         '--to-port',
         type=int,
-        default=443,
+        default=80,
         help='The highest port on which Pingdom probes')
     parser.add_argument(
         'security-group',
