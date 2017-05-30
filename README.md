@@ -26,7 +26,8 @@ $ ./sync-pingdom-ec2-security-groups.py --help
 usage: sync-pingdom-ec2-security-groups.py [-h] [--region REGION]
                                            [--whitelist WHITELIST]
                                            [--protocol {icmp,tcp,udp}]
-                                           [--port PORT]
+                                           [--from-port FROM_PORT]
+                                           [--to-port TO_PORT]
                                            security-group [security-group ...]
 
 positional arguments:
@@ -41,7 +42,9 @@ optional arguments:
                         contain one one IP per line
   --protocol {icmp,tcp,udp}
                         The protocol used by the Pingdom probe
-  --port PORT           The port on which Pingdom probes
+  --from-port FROM_PORT
+                        The lowest port on which Pingdom probes
+  --to-port TO_PORT     The highest port on which Pingdom probes
 ```
 
 Note that your environment must be configured to provide valid AWS credentials.
@@ -85,7 +88,7 @@ SUCCESS
 
 Running the script once more does not further modify the security groups:
 ```
-$ ./sync-pingdom-ec2-security-groups.sh sg-12345678 sg-23456789 sg-34567890
+$ ./sync-pingdom-ec2-security-groups.py sg-12345678 sg-23456789 sg-34567890
 SUCCESS
 ```
 
