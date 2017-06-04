@@ -23,7 +23,8 @@ script with `--help`:
 
 ```
 $ ./sync-pingdom-ec2-security-groups.py --help
-usage: sync-pingdom-ec2-security-groups.py [-h] [--region REGION]
+usage: sync-pingdom-ec2-security-groups.py [-h] [--profile PROFILE]
+                                           [--region REGION]
                                            [--whitelist WHITELIST]
                                            [--protocol {icmp,tcp,udp}]
                                            [--from-port FROM_PORT]
@@ -35,6 +36,8 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
+  --profile PROFILE     The AWS config profile to use; defaults to the default
+                        profile
   --region REGION       The AWS region where the security groups are located;
                         defaults to the environment's default region
   --whitelist WHITELIST
