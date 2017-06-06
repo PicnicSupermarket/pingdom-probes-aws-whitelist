@@ -71,8 +71,8 @@ class PingdomSecurityGroup(object):
             self.sg.authorize_ingress(**p.as_dict())
 
 class SecurityGroupUpdater(object):
-    def __init__(self, region, whitelist, protocol, from_port, to_port, security_groups):
-        self.region = region
+    def __init__(self, session, whitelist, protocol, from_port, to_port, security_groups):
+        self.session = session
         self.whitelist = whitelist
         self.protocol = protocol
         self.from_port = from_port
@@ -99,13 +99,17 @@ class SecurityGroupUpdater(object):
         return Permission(self.protocol, '{0}/32'.format(ip), self.from_port, self.to_port)
 
     def configure_permissions(self, permissions):
-        ec2 = boto3.resource('ec2', region_name=self.region)
+        ec2 = self.session.resource('ec2')
         for sg_id in self.security_groups:
             sg = PingdomSecurityGroup(ec2.SecurityGroup(sg_id))
             sg.update_permissions(permissions)
 
 def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '--profile',
+        default=None,
+        help='The AWS config profile to use; defaults to the default profile')
     parser.add_argument(
         '--region',
         default=None,
@@ -135,7 +139,9 @@ def main():
         help='One of the security groups to be updated')
     args = parser.parse_args()
 
-    updater = SecurityGroupUpdater(args.region, args.whitelist, args.protocol, args.from_port, args.to_port, getattr(args, 'security-group'))
+    session = boto3.Session(region_name=args.region, profile_name=args.profile)
+
+    updater = SecurityGroupUpdater(session, args.whitelist, args.protocol, args.from_port, args.to_port, getattr(args, 'security-group'))
     updater.run()
 
 if __name__ == '__main__':
