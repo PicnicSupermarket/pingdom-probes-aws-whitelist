@@ -4,10 +4,6 @@ import argparse
 import boto3
 import requests
 
-# The maximum number of rules that may be contained in a single AWS security
-# group.
-MAX_SG_PERM_COUNT = 50
-
 class Permission(object):
     def __init__(self, protocol, cidr_ip, from_port, to_port):
         self.protocol = protocol
@@ -45,14 +41,14 @@ class PingdomSecurityGroup(object):
     def __init__(self, sg):
         self.sg = sg
 
-    def update_permissions(self, target_perms):
+    def update_permissions(self, target_perms, max_perms):
         active_perms = self.get_permissions()
 
         self.drop_permissions(active_perms - target_perms)
         active_perms &= target_perms
         target_perms -= active_perms
 
-        new_perms = set(list(target_perms)[:MAX_SG_PERM_COUNT - len(active_perms)])
+        new_perms = set(list(target_perms)[:max_perms - len(active_perms)])
         self.add_permissions(new_perms)
         target_perms -= new_perms
 
@@ -71,12 +67,13 @@ class PingdomSecurityGroup(object):
             self.sg.authorize_ingress(**p.as_dict())
 
 class SecurityGroupUpdater(object):
-    def __init__(self, session, whitelist, protocol, from_port, to_port, security_groups):
+    def __init__(self, session, whitelist, protocol, from_port, to_port, rules_per_security_group, security_groups):
         self.session = session
         self.whitelist = whitelist
         self.protocol = protocol
         self.from_port = from_port
         self.to_port = to_port
+        self.rules_per_security_group = rules_per_security_group
         self.security_groups = security_groups
 
     def run(self):
@@ -102,7 +99,7 @@ class SecurityGroupUpdater(object):
         ec2 = self.session.resource('ec2')
         for sg_id in self.security_groups:
             sg = PingdomSecurityGroup(ec2.SecurityGroup(sg_id))
-            sg.update_permissions(permissions)
+            sg.update_permissions(permissions, self.rules_per_security_group)
 
 def main():
     parser = argparse.ArgumentParser()
@@ -134,6 +131,11 @@ def main():
         default=80,
         help='The highest port on which Pingdom probes')
     parser.add_argument(
+        '--rules-per-security-group',
+        type=int,
+        default=60,
+        help='The maximum number of rules per security group')
+    parser.add_argument(
         'security-group',
         nargs='+',
         help='One of the security groups to be updated')
@@ -141,7 +143,7 @@ def main():
 
     session = boto3.Session(region_name=args.region, profile_name=args.profile)
 
-    updater = SecurityGroupUpdater(session, args.whitelist, args.protocol, args.from_port, args.to_port, getattr(args, 'security-group'))
+    updater = SecurityGroupUpdater(session, args.whitelist, args.protocol, args.from_port, args.to_port, args.rules_per_security_group, getattr(args, 'security-group'))
     updater.run()
 
 if __name__ == '__main__':
