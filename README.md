@@ -29,6 +29,7 @@ usage: sync-pingdom-ec2-security-groups.py [-h] [--profile PROFILE]
                                            [--protocol {icmp,tcp,udp}]
                                            [--from-port FROM_PORT]
                                            [--to-port TO_PORT]
+                                           [--rules-per-security-group RULES_PER_SECURITY_GROUP]
                                            security-group [security-group ...]
 
 positional arguments:
@@ -48,6 +49,8 @@ optional arguments:
   --from-port FROM_PORT
                         The lowest port on which Pingdom probes
   --to-port TO_PORT     The highest port on which Pingdom probes
+  --rules-per-security-group RULES_PER_SECURITY_GROUP
+                        The maximum number of rules per security group
 ```
 
 Note that your environment must be configured to provide valid AWS credentials.
